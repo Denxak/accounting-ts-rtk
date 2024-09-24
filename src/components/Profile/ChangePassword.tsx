@@ -22,11 +22,6 @@ const ChangePassword = ({onClose}:OnCloseProps) => {
         }
     }
 
-    const handleClickClose = () => {
-        alert("Close change password without save");
-        onClose();
-    }
-
     return (
         <div>
             <label>Old password:
@@ -50,7 +45,7 @@ const ChangePassword = ({onClose}:OnCloseProps) => {
                     type="password" />
             </label>
             <button onClick={handleClickSave}>Save and Close</button>
-            <button onClick={handleClickClose}>Close without Save</button>
+            <button onClick={onClose}>Close without Save</button>
             <button onClick={handleClickClear}>Clear</button>
         </div>
     )
