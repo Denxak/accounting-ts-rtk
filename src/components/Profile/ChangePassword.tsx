@@ -3,7 +3,7 @@ import { OnCloseProps } from "../../utils/types";
 import { useAppDispatch } from "../../app/hooks";
 import { changePassword } from "../../features/api/accountApi";
 
-const ChangePassword = ({onClose}:OnCloseProps) => {
+const ChangePassword = ({ onClose }: OnCloseProps) => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -17,7 +17,7 @@ const ChangePassword = ({onClose}:OnCloseProps) => {
 
     const handleClickSave = () => {
         if (newPassword === repeatPassword) {
-            dispatch(changePassword(newPassword));
+            dispatch(changePassword([newPassword, oldPassword]));
             onClose();
         } else {
             alert("New password and repeat password are different");

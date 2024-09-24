@@ -61,19 +61,19 @@ export const updateUser = createAsyncThunk<UserData, UserData, { state: RootStat
     }
 )
 
-export const changePassword = createAsyncThunk<string, string, { state: RootState }>(
+export const changePassword = createAsyncThunk<string, [string, string], { state: RootState }>(
     'user/password',
-    async (password, { getState }) => {
+    async (passwords, { getState }) => {
         const response = await fetch(`${base_url}/user/password`, {
             method: 'PUT',
             headers: {
-                'X-Password': password,
-                'Authorization': getState().token,
+                'X-Password': passwords[0],
+                'Authorization': createToken(getState().user.login, passwords[1]),
             }
         })
         if (!response.ok) {
             throw new Error('Something went wrong');
         }
-        return createToken(getState().user.login, password);
+        return createToken(getState().user.login, passwords[0]);
     }
 )
