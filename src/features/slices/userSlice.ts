@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { UserProfile } from "../../utils/types";
 import { fetchUser, registerUser, updateUser } from "../api/accountApi";
 
-//TODO add  to reducers updateUser
 const userSlice = createSlice({
     name: "user",
     initialState: {} as UserProfile,

@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { OnCloseProps } from "../../utils/types";
+import { useAppDispatch } from "../../app/hooks";
+import { updateUser } from "../../features/api/accountApi";
 
 const EditProfile = ({onClose}:OnCloseProps) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const dispatch = useAppDispatch();
 
   const handleClickClear = () => {
     setFirstName('');
@@ -11,8 +14,7 @@ const EditProfile = ({onClose}:OnCloseProps) => {
   }
 
   const handleClickSave = () => {
-    // TODO Save update profile
-    alert("Save profile");
+    dispatch(updateUser({firstName, lastName}));
     onClose();
   }
 
