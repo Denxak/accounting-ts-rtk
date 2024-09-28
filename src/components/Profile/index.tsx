@@ -13,9 +13,13 @@ const Profile = () => {
   }
 
   return (
-    <div>
+    <div className="bg-whitesmoke p-6 rounded shadow-lg">
       <ProfileData />
-      <button onClick={handleClickLogout}>Logout</button>
+      <button
+        className="mt-4 px-4 py-2 text-white bg-red-500 hover:bg-red-600 rounded transition duration-300"
+        onClick={handleClickLogout}>
+        Logout
+      </button>
       <UpdateUser />
     </div>
   )

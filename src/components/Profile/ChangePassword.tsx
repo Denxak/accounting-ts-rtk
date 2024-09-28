@@ -25,30 +25,39 @@ const ChangePassword = ({ onClose }: OnCloseProps) => {
     }
 
     return (
-        <div>
-            <label>Old password:
+        <div className="bg-whitesmoke p-6 rounded shadow-lg">
+            <div className="mb-4">
+                <label className="block text-gray-700 font-bold">Old password:</label>
                 <input
+                    className="border border-gray-300 rounded w-full py-2 px-3"
                     onChange={e => setOldPassword(e.target.value)}
                     value={oldPassword}
                     type="password"
                 />
-            </label>
-            <label>New password:
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 font-bold">New password:</label>
                 <input
+                    className="border border-gray-300 rounded w-full py-2 px-3"
                     onChange={e => setNewPassword(e.target.value)}
                     value={newPassword}
                     type="password"
                 />
-            </label>
-            <label>Repeat new password:
+            </div>
+            <div className="mb-4">
+                <label className="block text-gray-700 font-bold">Repeat new password:</label>
                 <input
+                    className="border border-gray-300 rounded w-full py-2 px-3"
                     onChange={e => setRepeatPassword(e.target.value)}
                     value={repeatPassword}
-                    type="password" />
-            </label>
-            <button onClick={handleClickSave}>Save and Close</button>
-            <button onClick={onClose}>Close without Save</button>
-            <button onClick={handleClickClear}>Clear</button>
+                    type="password"
+                />
+            </div>
+            <div className="space-x-2">
+                <button className="mt-4 px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded transition duration-300" onClick={handleClickSave}>Save and Close</button>
+                <button className="mt-2 px-4 py-2 text-white bg-gray-500 hover:bg-gray-600 rounded transition duration-300" onClick={onClose}>Close without Save</button>
+                <button className="border border-gray-400 rounded py-2 px-4 text-gray-700 hover:bg-gray-100" onClick={handleClickClear}>Clear</button>
+            </div>
         </div>
     )
 }
