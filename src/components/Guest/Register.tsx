@@ -1,6 +1,7 @@
-import { useState } from "react"
-import { useAppDispatch } from "../../app/hooks";
+import { KeyboardEvent, useState } from "react"
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { registerUser } from "../../features/api/accountApi";
+import { clearError } from "../../features/slices/tokenSlice";
 
 const Register = () => {
     const [login, setLogin] = useState('');
@@ -8,24 +9,32 @@ const Register = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const dispatch = useAppDispatch()
+    const error = useAppSelector(state => state.token.error);
 
     const handleClickClear = () => {
         setLogin('');
         setPassword('');
         setFirstName('');
         setLastName('');
+        dispatch(clearError());
     }
 
     const handleClickRegister = () => {
         dispatch(registerUser({login, password, firstName, lastName}));
     }
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleClickRegister();
+        }
+    }
     return (
         <div className="flex flex-col space-y-4">
             <label className="text-gray-700">Login:
                 <input
                     className="border border-gray-300 rounded px-2 py-1 mt-1 w-full"
                     onChange={e => setLogin(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     value={login}
                     type="text"
                 />
@@ -34,6 +43,7 @@ const Register = () => {
                 <input
                     className="border border-gray-300 rounded px-2 py-1 mt-1 w-full"
                     onChange={e => setPassword(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     value={password}
                     type="password"
                 />
@@ -42,6 +52,7 @@ const Register = () => {
                 <input
                     className="border border-gray-300 rounded px-2 py-1 mt-1 w-full"
                     onChange={e => setFirstName(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     value={firstName}
                     type="text"
                 />
@@ -50,10 +61,12 @@ const Register = () => {
                 <input
                     className="border border-gray-300 rounded px-2 py-1 mt-1 w-full"
                     onChange={e => setLastName(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     value={lastName}
                     type="text"
                 />
             </label>
+            {error && <div className="text-red-500 text-sm">{error}</div>}
             <div className="mt-4 space-y-2">
                 <button 
                     onClick={handleClickRegister} 

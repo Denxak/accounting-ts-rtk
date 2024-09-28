@@ -14,7 +14,7 @@ export const registerUser = createAsyncThunk(
             }
         })
         if (response.status === 409) {
-            throw new Error(`user ${user.login} already exists`);
+            throw new Error(`User ${user.login} already exists`);
         }
         if (!response.ok) {
             throw new Error('Something went wrong');
@@ -35,7 +35,7 @@ export const fetchUser = createAsyncThunk(
             }
         })
         if (!response.ok) {
-            throw new Error('Something went wrong');
+            throw new Error('Login failed. Please check your credentials.');
         }
         const data = await response.json();
         return { token, user: data };
@@ -50,7 +50,7 @@ export const updateUser = createAsyncThunk<UserData, UserData, { state: RootStat
             body: JSON.stringify(user),
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': getState().token,
+                'Authorization': getState().token.token,
             }
         })
         if (!response.ok) {
@@ -61,7 +61,7 @@ export const updateUser = createAsyncThunk<UserData, UserData, { state: RootStat
     }
 )
 
-export const changePassword = createAsyncThunk<string, [string, string], { state: RootState }>(
+export const changePassword = createAsyncThunk<string, [string, string], { state: RootState}>(
     'user/password',
     async (passwords, { getState }) => {
         const response = await fetch(`${base_url}/user/password`, {

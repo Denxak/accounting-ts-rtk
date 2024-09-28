@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import token from "../features/slices/tokenSlice";
 import user from "../features/slices/userSlice";
-import { UserProfile } from "../utils/types";
+import { Token, UserProfile } from "../utils/types";
 
-const preloadedState = JSON.parse(localStorage.getItem('state') ?? '{}') as {user: UserProfile, token: string};
+const preloadedState = JSON.parse(localStorage.getItem('state') ?? '{}') as {user: UserProfile, token: Token};
 
 export const store = configureStore({
     reducer: {

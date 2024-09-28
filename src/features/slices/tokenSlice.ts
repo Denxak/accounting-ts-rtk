@@ -1,20 +1,53 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { changePassword, fetchUser, registerUser } from "../api/accountApi";
+import { Token } from "../../utils/types";
+
+const initialState: Token = {
+    token: "",
+    error: null,
+};
 
 const tokenSlice = createSlice({
     name: "token",
-    initialState: "",
+    initialState,
     reducers: {
-        putToken: (_state, action) => action.payload,
-        deleteToken: () => "",
+        putToken: (state, action) => {
+            state.error = null;
+            state.token = action.payload
+        },
+        deleteToken: (state) => {
+            state.token = "";
+            state.error = null;
+        },
+        clearError: (state) => {
+            state.error = null;
+        },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(registerUser.fulfilled, (_state, action) => action.payload.token)
-            .addCase(fetchUser.fulfilled, (_state, action) => action.payload.token)
-            .addCase(changePassword.fulfilled, (_state, action) => action.payload);
+            .addCase(registerUser.fulfilled, (state, action) => {
+                state.token = action.payload.token;
+                state.error = null; 
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                state.error = action.error.message;
+            })
+            .addCase(fetchUser.fulfilled, (state, action) => {
+                state.token = action.payload.token;
+                state.error = null;
+            })
+            .addCase(fetchUser.rejected, (state, action) => {
+                state.error = action.error.message; 
+            })
+            .addCase(changePassword.fulfilled, (state, action) => {
+                state.token = action.payload;
+                state.error = null; 
+            })
+            .addCase(changePassword.rejected, (state, action) => {
+                state.error = action.error.message;
+            });
     },
 })
 
-export const { putToken, deleteToken } = tokenSlice.actions;
+export const { putToken, deleteToken, clearError } = tokenSlice.actions;
 export default tokenSlice.reducer;

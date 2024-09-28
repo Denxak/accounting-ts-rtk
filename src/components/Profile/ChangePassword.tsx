@@ -1,28 +1,36 @@
 import { useState } from "react";
 import { OnCloseProps } from "../../utils/types";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { changePassword } from "../../features/api/accountApi";
+import { clearError } from "../../features/slices/tokenSlice";
 
 const ChangePassword = ({ onClose }: OnCloseProps) => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const dispatch = useAppDispatch();
+    const error = useAppSelector(state => state.token.error);
+    const [passwordError, setPasswordError] = useState('');
 
     const handleClickClear = () => {
         setOldPassword('');
         setNewPassword('');
         setRepeatPassword('');
+        setPasswordError('');
+        dispatch(clearError());
     }
 
-    const handleClickSave = () => {
+    const handleClickSave = async () => {
         if (newPassword === repeatPassword) {
-            dispatch(changePassword([newPassword, oldPassword]));
-            onClose();
-        } else {
-            alert("New password and repeat password are different");
+            const resultAction = await dispatch(changePassword([newPassword, oldPassword]));
+            if (changePassword.fulfilled.match(resultAction)) {
+                handleClickClear();
+                onClose();
+            }
+        }else{
+            setPasswordError('New password and repeat password are different');
         }
-    }
+    };
 
     return (
         <div className="bg-whitesmoke p-6 rounded shadow-lg">
@@ -53,6 +61,8 @@ const ChangePassword = ({ onClose }: OnCloseProps) => {
                     type="password"
                 />
             </div>
+            {passwordError && <div className="text-red-500 text-sm">{passwordError}</div>}
+            {error && <div className="text-red-500 text-sm">{error}</div>}
             <div className="space-x-2">
                 <button className="mt-4 px-4 py-2 text-white bg-green-500 hover:bg-green-600 rounded transition duration-300" onClick={handleClickSave}>Save and Close</button>
                 <button className="mt-2 px-4 py-2 text-white bg-gray-500 hover:bg-gray-600 rounded transition duration-300" onClick={onClose}>Close without Save</button>

@@ -4,7 +4,7 @@ import Profile from './components/Profile'
 import { useAppSelector } from './app/hooks'
 
 function App() {
-  const token = useAppSelector(state => state.token);
+  const token = useAppSelector(state => state.token.token);
   return (
     <Routes>
       <Route path='/' element={token ? <Navigate to='/profile' /> : <Guest />} />

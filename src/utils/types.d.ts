@@ -6,16 +6,20 @@ export interface OnCloseProps {
     onClose: () => void;
 }
 
-export interface UserProfile {
-    firstName: string;
-    lastName: string;
+export interface Error {
+    error?: string | null;
+}
+
+export interface Token extends Error {
+    token: string;
+}
+
+export interface UserProfile extends UserData, Error {
     login: string;
     roles: string[];
 } 
 
-export interface UserRegister {
-    firstName: string;
-    lastName: string;
+export interface UserRegister extends UserData{
     login: string;
     password: string;
 }

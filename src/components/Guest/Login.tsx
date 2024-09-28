@@ -1,28 +1,37 @@
-import { useState } from 'react'
-import { useAppDispatch } from '../../app/hooks';
+import { KeyboardEvent, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchUser } from '../../features/api/accountApi';
 import { createToken } from '../../utils/constants';
+import { clearError } from '../../features/slices/tokenSlice';
 
 const Login = () => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useAppDispatch();
+    const error = useAppSelector(state => state.token.error);
 
     const handleClickClear = () => {
         setLogin('');
         setPassword('');
+        dispatch(clearError());
     }
 
     const handleClickLogin = () => {
         dispatch(fetchUser(createToken(login, password)))
     }
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleClickLogin();
+        }
+    }
     return (
         <div className="flex flex-col space-y-4">
             <label className="text-gray-700">Login:
                 <input
                     className="border border-gray-300 rounded px-2 py-1 mt-1 w-full"
                     onChange={e => setLogin(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     value={login}
                     type="text"
                 />
@@ -31,10 +40,12 @@ const Login = () => {
                 <input
                     className="border border-gray-300 rounded px-2 py-1 mt-1 w-full"
                     onChange={e => setPassword(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     value={password}
                     type="password"
                 />
             </label>
+            {error && <div className="text-red-500 text-sm">{error}</div>}
             <div className="mt-4 space-y-2"> 
                 <button
                     className="w-full px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded transition duration-300"
