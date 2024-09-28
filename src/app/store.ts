@@ -3,7 +3,18 @@ import token from "../features/slices/tokenSlice";
 import user from "../features/slices/userSlice";
 import { Token, UserProfile } from "../utils/types";
 
-const preloadedState = JSON.parse(localStorage.getItem('state') ?? '{}') as {user: UserProfile, token: Token};
+const savedState = localStorage.getItem('state');
+let preloadedState: { user: UserProfile; token: Token } | undefined;
+
+if (savedState) {
+    const parsedState = JSON.parse(savedState);
+    if (typeof parsedState.token === 'string') {
+        localStorage.removeItem('state');
+        preloadedState = undefined;
+    } else {
+        preloadedState = parsedState as { user: UserProfile; token: Token };
+    }
+}
 
 export const store = configureStore({
     reducer: {
